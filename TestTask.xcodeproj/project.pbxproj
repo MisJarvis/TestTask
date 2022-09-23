@@ -71,12 +71,12 @@
 		632FA1D828DDEFD600850BD4 /* TestTask */ = {
 			isa = PBXGroup;
 			children = (
+				632FA1D928DDEFD600850BD4 /* TestTaskApp.swift */,
 				632FA20D28DE3D7100850BD4 /* Views */,
 				632FA1F428DDFE9E00850BD4 /* Models */,
 				632FA1ED28DDFA3700850BD4 /* ViewModels */,
 				632FA1E728DDF02A00850BD4 /* Services */,
 				632FA20828DE37CD00850BD4 /* Extensions */,
-				632FA1D928DDEFD600850BD4 /* TestTaskApp.swift */,
 				632FA1DD28DDEFDA00850BD4 /* Assets.xcassets */,
 				632FA1DF28DDEFDA00850BD4 /* Preview Content */,
 			);
@@ -145,6 +145,7 @@
 				632FA1D228DDEFD600850BD4 /* Sources */,
 				632FA1D328DDEFD600850BD4 /* Frameworks */,
 				632FA1D428DDEFD600850BD4 /* Resources */,
+				632FA21328DE59B000850BD4 /* SwiftLint */,
 			);
 			buildRules = (
 			);
@@ -207,6 +208,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		632FA21328DE59B000850BD4 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		632FA1D228DDEFD600850BD4 /* Sources */ = {

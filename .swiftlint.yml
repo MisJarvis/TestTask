@@ -1,0 +1,54 @@
+included:
+- TestTask
+- TestTaskTests
+- TestTaskUITests
+excluded:
+- Carthage
+- Pods
+- SwiftLint/Common/3rdPartyLib
+disabled_rules:
+- trailing_whitespace
+opt_in_rules:
+- indentation_width
+- empty_count
+- empty_string
+custom_rules:
+  disable_print:
+    name: "Print Usage"
+    regex: "((\\bprint)|(Swift\\.print))\\s*\\("
+    message: "You should use Logger.log instead of print"
+    severity: warning
+  closing_bracket:
+    name: "Closing Bracket"
+    message: "No empty lines are allowed before closing bracket"
+    regex: '^\s*$\n\s*\}'
+  empty_line_after_declaration:
+    name: "Empty Line After Declaration"
+    message: "There should be single empty line after Views and ViewModels"
+    regex: '(class|struct)((?-s).*(\bView\b|\bViewModel\b).*\{$\n.*\b\b.*$)'
+indentation_width:
+    indentation_width: 4
+identifier_name:
+    warning: 3
+    error: 2
+    excluded: ["id", "url"]
+line_length:
+    warning: 150
+    error: 200
+    ignores_urls: true
+function_body_length:
+    warning: 100
+    error: 300
+function_parameter_count:
+    warning: 6
+    error: 8
+type_body_length:
+    warning: 300
+    error: 500
+file_length:
+    warning: 700
+    error: 1000
+cyclomatic_complexity:
+    warning: 8
+    error: 10
+reporter: "xcode"

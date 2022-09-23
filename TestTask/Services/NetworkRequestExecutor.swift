@@ -10,6 +10,11 @@ import Alamofire
 import Combine
 import SwiftJWT
 
+struct JWTClaims: Claims {
+    let uid: UUID
+    let identity: String
+}
+
 final class NetworkRequestExecutor {
     static let network: Session = Session.default
     let network: Session
@@ -28,18 +33,11 @@ final class NetworkRequestExecutor {
     }
     
     func getJWTToken() -> String {
-        struct JWTClaims: Claims {
-            let uid: UUID
-            let identity: String
-        }
-        
         do {
             let claims = JWTClaims(uid: UUID(), identity: "Yevstafieva Yevheniia")
             var jwt = JWT(claims: claims)
             
             let token = try jwt.sign(using: .hs256(key: "$SECRET$".toBase64Data()))
-            
-            print("TOKEN: \(token)")
             
             return token
         } catch {
@@ -100,7 +98,6 @@ final class NetworkRequestExecutor {
                 if let error = result.error {
                     completion(.failure(error))
                 } else if let value = result.value {
-                    print("vvalue: \(value)")
                     completion(.success(value))
                 }
             })

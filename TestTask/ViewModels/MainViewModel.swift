@@ -18,10 +18,10 @@ class MainViewModel: ObservableObject {
     
     init(networkingService: APIService) {
         self.networkingService = networkingService
-        self.fetchPeopleList()
+        self.fetchPeople()
     }
     
-    func fetchPeopleList() {
+    func fetchPeople() {
         self.networkingService
             .getPeopleList()
             .receive(on: RunLoop.main)
@@ -35,13 +35,31 @@ class MainViewModel: ObservableObject {
                 }
             } receiveValue: { [weak self] values in
                 guard let self = self else {return}
-                
                 self.people = values.data
             }
             .store(in: &cancellables)
     }
     
-    func fetchPeopleList(personId: String) {
+    func fetchPeopleDetails(personId: String) {
+        self.networkingService
+            .getPeopleDetails(id: personId)
+            .receive(on: RunLoop.main)
+            .sink { result in
+                switch result {
+                case .failure(let error):
+                    print("Get People Details Error: \(error)")
+                    break
+                case .finished:
+                    break
+                }
+            } receiveValue: { [weak self] values in
+                guard let self = self else {return}
+                self.person = values.data
+            }
+            .store(in: &cancellables)
+    }
+    
+    func fetchPerson(personId: String) {
         self.networkingService
             .getPeopleDetails(id: personId)
             .receive(on: RunLoop.main)
