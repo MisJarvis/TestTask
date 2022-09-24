@@ -9,10 +9,11 @@ import SwiftUI
 
 struct DetailsView: View {
     
-    @EnvironmentObject var viewModel: MainViewModel
+    @ObservedObject var viewModel: MainViewModel
     private var personId: String
     
-    init(personId: String) {
+    init(viewModel: MainViewModel, personId: String) {
+        self.viewModel = viewModel
         self.personId = personId
     }
     
@@ -22,6 +23,7 @@ struct DetailsView: View {
                 Color.green
                     .opacity(0.1)
                     .ignoresSafeArea()
+                    .tag("details_background")
                 
                 VStack(alignment: .center) {
                     Rectangle()
@@ -31,6 +33,7 @@ struct DetailsView: View {
                             colors: [.green.opacity(0.3), .blue.opacity(0.5)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing))
+                        .tag("details_background_navbar")
                     
                     Image(systemName: "person.crop.circle")
                         .resizable()
@@ -38,14 +41,19 @@ struct DetailsView: View {
                         .frame(
                             width: geometry.size.width / 3,
                             height: geometry.size.height / 3)
+                        .tag("details_image_person")
                     
                     Text(viewModel.person.firstName + " " + viewModel.person.firstName)
                         .font(.title)
+                        .tag("details_full_name_person")
                     
                     VStack(alignment: .leading) {
                         Label("Age: \(viewModel.person.age)", systemImage: "bolt.heart")
+                            .tag("details_age_person")
                         Label("Gender: \(viewModel.person.gender)", systemImage: "face.smiling")
+                            .tag("details_gender_person")
                         Label("Country: \(viewModel.person.country)", systemImage: "globe.europe.africa")
+                            .tag("details_country_person")
                     }
                     .padding()
                     Spacer()
@@ -65,11 +73,11 @@ struct DetailsView: View {
 #if DEBUG
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailsView(personId: String())
+        DetailsView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())), personId: String())
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro"))
             .previewDisplayName("iPhone 13 Pro")
         
-        DetailsView(personId: String())
+        DetailsView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())), personId: String())
             .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
             .previewDisplayName("iPhone 8")
     }

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @EnvironmentObject var viewModel: MainViewModel
+    @ObservedObject var viewModel: MainViewModel
     
     var body: some View {
         NavigationView {
@@ -17,6 +17,7 @@ struct MainView: View {
                 Color.green
                     .opacity(0.1)
                     .ignoresSafeArea()
+                    .tag("main_background")
                 
                 VStack {
                     Rectangle()
@@ -26,16 +27,19 @@ struct MainView: View {
                             colors: [.green.opacity(0.3), .blue.opacity(0.5)],
                             startPoint: .topLeading,
                             endPoint: .bottomTrailing))
+                        .tag("main_background_navbar")
                     
                     ScrollView {
                         VStack(alignment: .leading) {
                             ForEach(viewModel.people, id: \.self) { person in
                                 NavigationLink {
-                                    DetailsView(personId: person)
+                                    DetailsView(viewModel: viewModel, personId: person)
                                 } label: {
                                     Label(person, systemImage: "folder")
                                         .padding()
+                                        .tag("main_label_person")
                                 }
+                                .tag("main_navlink")
                             }
                         }
                     }
@@ -53,11 +57,11 @@ struct MainView: View {
 #if DEBUG
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView()
+        MainView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())))
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro"))
             .previewDisplayName("iPhone 13 Pro")
         
-        MainView()
+        MainView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())))
             .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
             .previewDisplayName("iPhone 8")
     }

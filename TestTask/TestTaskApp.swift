@@ -11,8 +11,7 @@ import SwiftUI
 struct TestTaskApp: App {
     var body: some Scene {
         WindowGroup {
-            MainView()
-                .environmentObject(MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())))
+            MainView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())))
         }
     }
 }
