@@ -9,13 +9,9 @@ import SwiftUI
 
 struct DetailsView: View {
     
-    @ObservedObject var viewModel: MainViewModel
-    private var personId: String
-    
-    init(viewModel: MainViewModel, personId: String) {
-        self.viewModel = viewModel
-        self.personId = personId
-    }
+    @EnvironmentObject var viewModel: MainViewModel
+    internal var didAppear: ((Self) -> Void)?
+    var personId: String
     
     var body: some View {
         GeometryReader { geometry in
@@ -35,27 +31,38 @@ struct DetailsView: View {
                             endPoint: .bottomTrailing))
                         .tag("details_background_navbar")
                     
-                    Image(systemName: "person.crop.circle")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(
-                            width: geometry.size.width / 3,
-                            height: geometry.size.height / 3)
-                        .tag("details_image_person")
-                    
-                    Text(viewModel.person.firstName + " " + viewModel.person.firstName)
-                        .font(.title)
-                        .tag("details_full_name_person")
-                    
-                    VStack(alignment: .leading) {
-                        Label("Age: \(viewModel.person.age)", systemImage: "bolt.heart")
-                            .tag("details_age_person")
-                        Label("Gender: \(viewModel.person.gender)", systemImage: "face.smiling")
-                            .tag("details_gender_person")
-                        Label("Country: \(viewModel.person.country)", systemImage: "globe.europe.africa")
-                            .tag("details_country_person")
+                    if let person = viewModel.person {
+                        Image(systemName: "person.crop.circle")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(
+                                width: geometry.size.width / 3,
+                                height: geometry.size.height / 3)
+                            .tag("details_image_person")
+                        
+                        Text(person.firstName + " " + person.firstName)
+                            .font(.title)
+                            .tag("details_full_name_person")
+                        
+                        VStack(alignment: .leading) {
+                            Label("Age: \(person.age)", systemImage: "bolt.heart")
+                                .tag("details_age_person")
+                            Label("Gender: \(person.gender)", systemImage: "face.smiling")
+                                .tag("details_gender_person")
+                            Label("Country: \(person.country)", systemImage: "globe.europe.africa")
+                                .tag("details_country_person")
+                        }
+                        .padding()
+                    } else {
+                        Text("Failed to load person data")
+                            .font(.title)
+                        
+                        Button {
+                            viewModel.fetchPerson(personId: self.personId)
+                        } label: {
+                            Label("Try again", systemImage: "arrow.clockwise")
+                        }
                     }
-                    .padding()
                     Spacer()
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -66,6 +73,7 @@ struct DetailsView: View {
         }
         .onAppear {
             self.viewModel.fetchPerson(personId: personId)
+            self.didAppear?(self)
         }
     }
 }
@@ -73,11 +81,11 @@ struct DetailsView: View {
 #if DEBUG
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailsView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())), personId: String())
+        DetailsView(personId: String())
             .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro"))
             .previewDisplayName("iPhone 13 Pro")
         
-        DetailsView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())), personId: String())
+        DetailsView(personId: String())
             .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
             .previewDisplayName("iPhone 8")
     }

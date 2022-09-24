@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct TestTaskApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            MainView(viewModel: MainViewModel(networkingService: APIService(executor: NetworkRequestExecutor())))
+            MainView().environmentObject(MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor())))
         }
     }
 }

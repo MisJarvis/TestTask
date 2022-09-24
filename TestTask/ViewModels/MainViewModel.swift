@@ -7,48 +7,70 @@
 
 import Foundation
 import Combine
+import LoggerAPI
 
 class MainViewModel: ObservableObject {
     
-    private var networkingService: APIService
+    private var dataFetchable: DataFetchable
     private var cancellables = Set<AnyCancellable>()
     
-    @Published var people: [String] = []
-    @Published var person: Person = Person()
+    @Published var people: [String: String] = [:]
+    @Published var person: Person?
     
-    init(networkingService: APIService) {
-        self.networkingService = networkingService
+    init(dataFetchable: DataFetchable) {
+        self.dataFetchable = dataFetchable
         self.fetchPeople()
     }
     
     func fetchPeople() {
-        self.networkingService
+        self.dataFetchable
             .getPeopleList()
             .receive(on: RunLoop.main)
             .sink { result in
                 switch result {
                 case .failure(let error):
-                    print("Get People List Error: \(error)")
-                    break
+                    Log.error("Get People List Error: \(error)")
                 case .finished:
                     break
                 }
             } receiveValue: { [weak self] values in
                 guard let self = self else {return}
-                self.people = values.data
+                let list = values.data
+                list.forEach { id in
+                    self.fetchPeopleDetails(personId: id)
+                }
             }
             .store(in: &cancellables)
     }
     
-    func fetchPerson(personId: String) {
-        self.networkingService
+    func fetchPeopleDetails(personId: String) {
+        self.dataFetchable
             .getPeopleDetails(id: personId)
             .receive(on: RunLoop.main)
             .sink { result in
                 switch result {
                 case .failure(let error):
-                    print("Get People Details Error: \(error)")
+                    Log.error("Get People List Error: \(error)")
+                case .finished:
                     break
+                }
+            } receiveValue: { [weak self] values in
+                guard let self = self else {return}
+                let key = values.data.id
+                let value = values.data.firstName
+                self.people[key] = value
+            }
+            .store(in: &cancellables)
+    }
+    
+    func fetchPerson(personId: String) {
+        self.dataFetchable
+            .getPeopleDetails(id: personId)
+            .receive(on: RunLoop.main)
+            .sink { result in
+                switch result {
+                case .failure(let error):
+                    Log.error("Get Person Data Error: \(error)")
                 case .finished:
                     break
                 }

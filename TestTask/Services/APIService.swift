@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-class APIService {
+class APIService: DataFetchable {
     let executor: NetworkRequestExecutor
     
     init(executor: NetworkRequestExecutor) {

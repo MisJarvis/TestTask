@@ -38,7 +38,6 @@ final class NetworkRequestExecutor {
             var jwt = JWT(claims: claims)
             
             let token = try jwt.sign(using: .hs256(key: "$SECRET$".toBase64Data()))
-            
             return token
         } catch {
             let nserror = error as NSError
