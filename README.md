@@ -20,3 +20,5 @@ To obtain a token for working with server data, the following key is used
 </p>
 
 ## Video
+
+https://user-images.githubusercontent.com/68379006/192392278-89def91e-7237-4283-b87b-314f6506421a.mp4
