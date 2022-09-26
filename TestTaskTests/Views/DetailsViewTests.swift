@@ -14,9 +14,8 @@ extension DetailsView: Inspectable {}
 class DetailsViewTests: XCTestCase {
     
     func testDetailsViewEmptyState() throws {
-        let viewModel = DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        let personId = String()
-        let sut = DetailsView(viewModel: viewModel, personId: personId)
+        let viewModel = DetailsViewModel()
+        let sut = DetailsView(viewModel: viewModel, personId: "1111")
         
         viewModel.person = nil
         viewModel.currentState = .empty
@@ -29,14 +28,18 @@ class DetailsViewTests: XCTestCase {
     }
     
     func testDetailsViewListState() throws {
-        let viewModel = DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        let personId = String()
-        let sut = DetailsView(viewModel: viewModel, personId: personId)
+        let viewModel = DetailsViewModel()
+        let sut = DetailsView(viewModel: viewModel, personId: "1111")
         
-        viewModel.fetchPerson(personId: personId)
-        viewModel.currentState = .list
-        
-        viewModel.person = Person()
+        viewModel.person = Person(
+            id: "1111",
+            firstName: "First Name",
+            lastName: "Last Name",
+            age: 15,
+            gender: "Famele",
+            country: "Ukraine"
+        )
+        viewModel.currentState = .dataReceived
         
         let backgroundColor = try? sut.inspect().find(viewWithTag: "details_background")
         let backgroundNavBar = try? sut.inspect().find(viewWithTag: "details_background_navbar")
@@ -56,16 +59,17 @@ class DetailsViewTests: XCTestCase {
     }
     
     func testDetailsViewErrorState() throws {
-        let viewModel = DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        let personId = String()
-        let sut = DetailsView(viewModel: viewModel, personId: personId)
+        let viewModel = DetailsViewModel()
+        let sut = DetailsView(viewModel: viewModel, personId: "1111")
         
-        viewModel.fetchPerson(personId: personId)
-        viewModel.currentState = .error
+        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
         
-        let textFaildLoad = try? sut.inspect().find(text: "details_text_error").string()
-        XCTAssertNotNil(textFaildLoad)
-        XCTAssertEqual(textFaildLoad, "details_text_error")
+        let titleError = try? sut.inspect().find(text: "details_title_error").string()
+        XCTAssertNotNil(titleError)
+        XCTAssertEqual(titleError, "details_title_error")
+        
+        let textError = try? sut.inspect().find(viewWithTag: "details_text_error")
+        XCTAssertNotNil(textError)
         
         let btnTryAgain = try? sut.inspect().find(text: "details_text_try_again").string()
         XCTAssertNotNil(btnTryAgain)
@@ -73,13 +77,11 @@ class DetailsViewTests: XCTestCase {
     }
     
     func testButtonTryAgainTap() throws {
-        let viewModel = DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        let personId = String()
-        let sut = DetailsView(viewModel: viewModel, personId: personId)
+        let viewModel = DetailsViewModel()
+        let sut = DetailsView(viewModel: viewModel, personId: "1111")
         
-        viewModel.fetchPerson(personId: personId)
-        viewModel.currentState = .error
-        
+        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
+  
         let button = try? sut.inspect().find(button: "details_text_try_again")
         try button?.tap()
     }

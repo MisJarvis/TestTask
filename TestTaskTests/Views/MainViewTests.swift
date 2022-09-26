@@ -14,7 +14,8 @@ extension MainView: Inspectable {}
 class MainViewTests: XCTestCase {
     
     func testMainViewEmptyState() throws {
-        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let mockDataFetchable = MockDataFetchable()
+        let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
         viewModel.people = [:]
@@ -28,11 +29,12 @@ class MainViewTests: XCTestCase {
     }
     
     func testMainViewListState() throws {
-        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let mockDataFetchable = MockDataFetchable()
+        let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.fetchPeople()
-        viewModel.currentState = .list
+        viewModel.people = ["1111": "Name 1"]
+        viewModel.currentState = .dataReceived
         
         let backgroundColor = try? sut.inspect().find(viewWithTag: "main_background")
         let backgroundNavBar = try? sut.inspect().find(viewWithTag: "main_background_navbar")
@@ -42,15 +44,18 @@ class MainViewTests: XCTestCase {
     }
     
     func testMainViewErrorState() throws {
-        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let mockDataFetchable = MockDataFetchable()
+        let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.fetchPeople()
-        viewModel.currentState = .error
+        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
+
+        let titleError = try? sut.inspect().find(text: "main_title_error").string()
+        XCTAssertNotNil(titleError)
+        XCTAssertEqual(titleError, "main_title_error")
         
-        let textFaildLoad = try? sut.inspect().find(text: "main_text_error").string()
-        XCTAssertNotNil(textFaildLoad)
-        XCTAssertEqual(textFaildLoad, "main_text_error")
+        let textError = try? sut.inspect().find(viewWithTag: "main_text_error")
+        XCTAssertNotNil(textError)
         
         let btnTryAgain = try? sut.inspect().find(text: "main_text_try_again").string()
         XCTAssertNotNil(btnTryAgain)
@@ -58,22 +63,23 @@ class MainViewTests: XCTestCase {
     }
     
     func testNavLinkTap() throws {
-        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let mockDataFetchable = MockDataFetchable()
+        let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.fetchPeople()
-        viewModel.currentState = .list
+        viewModel.people = ["1111": "Name 1"]
+        viewModel.currentState = .dataReceived
         
         let navLink = try? sut.inspect().find(button: "main_navlink")
         try navLink?.tap()
     }
     
     func testButtonTryAgainTap() throws {
-        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let mockDataFetchable = MockDataFetchable()
+        let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.fetchPeople()
-        viewModel.currentState = .error
+        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
         
         let button = try? sut.inspect().find(button: "main_text_try_again")
         try button?.tap()

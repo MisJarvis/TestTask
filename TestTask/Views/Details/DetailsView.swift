@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DetailsView: View {
     
-    @ObservedObject var viewModel: DetailsViewModelImpl
+    @ObservedObject var viewModel: DetailsViewModel
     var personId: String
     
     var body: some View {
@@ -32,10 +32,10 @@ struct DetailsView: View {
                 switch viewModel.currentState {
                 case .empty:
                     emptyStateView
-                case .list:
+                case .dataReceived:
                     listStateView
-                case .error:
-                    errorStateView
+                case .error(let error):
+                    errorStateView(error: error)
                 }
                 Spacer()
             }
@@ -44,7 +44,6 @@ struct DetailsView: View {
             .foregroundColor(.black)
             .background(.clear)
         }
-        .errorAlert(error: $viewModel.error)
         .onAppear {
             self.viewModel.fetchPerson(personId: personId)
         }
@@ -95,10 +94,15 @@ extension DetailsView {
         }
     }
     
-    private var errorStateView: some View {
+    private func errorStateView(error: Error) -> some View {
         VStack(alignment: .center) {
-            Text("details_text_error")
+            Text("details_title_error")
                 .font(.title)
+            
+            Text(error.localizedDescription)
+                .font(.title3)
+                .padding()
+                .tag("details_text_error")
             
             Button {
                 viewModel.fetchPerson(personId: personId)

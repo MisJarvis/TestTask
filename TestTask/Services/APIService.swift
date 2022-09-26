@@ -15,17 +15,29 @@ class APIService: DataFetchable {
         self.executor = executor
     }
     
-    func getPeopleList() -> AnyPublisher<NetworkResponse<[String]>, Error> {
-        return executor.executeRequest(
-            path: "/list",
-            method: .get
-        )
+    func getPeopleList() -> AnyPublisher<[String], Error> {
+        func request() -> AnyPublisher<NetworkResponse<[String]>, Error> {
+            return executor.executeRequest(
+                path: "/list",
+                method: .get
+            )
+        }
+        
+        return request()
+            .map { $0.data }
+            .eraseToAnyPublisher()
     }
     
-    func getPeopleDetails(id: String) -> AnyPublisher<NetworkResponse<Person>, Error> {
-        return executor.executeRequest(
-            path: "/get/\(id)",
-            method: .get
-        )
+    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error> {
+        func request() -> AnyPublisher<NetworkResponse<PersonDTO>, Error> {
+            return executor.executeRequest(
+                path: "/get/\(id)",
+                method: .get
+            )
+        }
+        
+        return request()
+            .map { $0.data.toDomainModel() }
+            .eraseToAnyPublisher()
     }
 }

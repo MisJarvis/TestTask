@@ -10,7 +10,7 @@
 
 "main_title" = "People List";
 "main_text_empty" = "No people are listed";
-"main_text_error" = "Failed to load people list";
+"main_title_error" = "Failed to load people list";
 "main_text_try_again" = "Try again";
 
 // MARK: DetailsView strings
@@ -21,9 +21,3 @@
 "details_text_empty" = "No data about person";
 "details_text_error" = "Failed to load person data";
 "details_text_try_again" = "Try again";
-
-// MARK: Alert strings
-
-"alert_title_error" = "Error";
-"alert_error_people_list" = "There was an error retrieving the list of people";
-"alert_error_details_person" = "There was an error retrieving the details of person";

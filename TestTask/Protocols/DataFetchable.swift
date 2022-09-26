@@ -9,6 +9,6 @@ import Foundation
 import Combine
 
 protocol DataFetchable {
-    func getPeopleList() -> AnyPublisher<NetworkResponse<[String]>, Error>
-    func getPeopleDetails(id: String) -> AnyPublisher<NetworkResponse<Person>, Error>
+    func getPeopleList() -> AnyPublisher<[String], Error>
+    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error>
 }

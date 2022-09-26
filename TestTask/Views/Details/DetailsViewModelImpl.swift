@@ -9,36 +9,34 @@ import Foundation
 import Combine
 import LoggerAPI
 
-class DetailsViewModelImpl: DetailsViewModel {
-    
+class DetailsViewModel: ObservableObject {
     @Published var person: Person?
-    @Published var currentState: ViewState = .list
-    @Published var error: Error?
+    @Published var currentState: ViewState = .empty
+    
+    func fetchPerson(personId: String) {}
+}
+
+class DetailsViewModelImpl: DetailsViewModel {
     
     private var dataFetchable: DataFetchable
     private var cancellables = Set<AnyCancellable>()
     
     init(dataFetchable: DataFetchable) {
         self.dataFetchable = dataFetchable
+        super.init()
     }
     
-    func fetchPerson(personId: String) {
+    override func fetchPerson(personId: String) {
         self.dataFetchable
             .getPeopleDetails(id: personId)
-            .receive(on: RunLoop.main)
-            .sink { result in
-                switch result {
-                case .failure(let errorData):
-                    self.error = ErrorState.peopleDetails
-                    self.currentState = .error
-                    Log.error("Get Person Data Error: \(errorData)")
-                case .finished:
-                    break
-                }
-            } receiveValue: { [weak self] values in
+            .sink { completion in
+                guard case .failure(let error) = completion else { return }
+                self.currentState = .error(errorState: error)
+                Log.error("Get Person Data Error: \(error)")
+            } receiveValue: { [weak self] person in
                 guard let self = self else {return}
-                self.person = values.data
-                self.currentState = .list
+                self.person = person
+                self.currentState = .dataReceived
             }
             .store(in: &cancellables)
     }

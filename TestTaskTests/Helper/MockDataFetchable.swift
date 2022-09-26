@@ -10,10 +10,30 @@ import SwiftUI
 import Combine
 @testable import TestTask
 
-//class MockDataFetchable: DataFetchable {
-//    func getPeopleList() -> AnyPublisher<NetworkResponse<[String]>, Error> {
-//    }
-//    
-//    func getPeopleDetails(id: String) -> AnyPublisher<NetworkResponse<Person>, Error> {
-//    }
-//}
+class MockDataFetchable: DataFetchable {
+    
+    var peopleList: [String]?
+    var person: Person?
+    
+    func getPeopleList() -> AnyPublisher<[String], Error> {
+        return Future<[String], Error> { promise in
+            if let list = self.peopleList {
+                promise(.success(list))
+            } else {
+                promise(.failure(RuntimeError("List is empty")))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+    
+    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error> {
+        return Future<Person, Error> { promise in
+            if let data = self.person {
+                promise(.success(data))
+            } else {
+                promise(.failure(RuntimeError("Data person is empty")))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}

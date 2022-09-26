@@ -9,7 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     
-    @ObservedObject var viewModel: MainViewModelImpl
+    @ObservedObject var viewModel: MainViewModel
     
     var body: some View {
         NavigationView {
@@ -32,10 +32,10 @@ struct MainView: View {
                     switch viewModel.currentState {
                     case .empty:
                         emptyStateView
-                    case .list:
+                    case .dataReceived:
                         listStateView
-                    case .error:
-                        errorStateView
+                    case .error(let error):
+                        errorStateView(error: error)
                     }
                     Spacer()
                 }
@@ -45,7 +45,6 @@ struct MainView: View {
                 .background(.clear)
             }
         }
-        .errorAlert(error: $viewModel.error)
         .accentColor(.black)
     }
 }
@@ -71,7 +70,7 @@ extension MainView {
             VStack(alignment: .leading) {
                 ForEach(viewModel.people.sorted(by: >), id: \.key) { id, name in
                     NavigationLink {
-                        DetailsView(viewModel: DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor())), personId: id)
+                        DetailsView(viewModel: DetailsViewModelImpl(dataFetchable: viewModel.dataFetchable), personId: id)
                     } label: {
                         HStack {
                             Label(name, systemImage: "folder")
@@ -86,10 +85,15 @@ extension MainView {
         }
     }
     
-    private var errorStateView: some View {
+    private func errorStateView(error: Error) -> some View {
         VStack(alignment: .center) {
-            Text("main_text_error")
+            Text("main_title_error")
                 .font(.title)
+            
+            Text(error.localizedDescription)
+                .font(.title3)
+                .padding()
+                .tag("main_text_error")
             
             Button {
                 viewModel.fetchPeople()

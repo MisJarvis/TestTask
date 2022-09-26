@@ -2,18 +2,16 @@
 //  Person.swift
 //  TestTask
 //
-//  Created by Yevstafieva Yevheniia on 23.09.2022.
+//  Created by Yevstafieva Yevheniia on 26.09.2022.
 //
 
 import Foundation
 
-// MARK: - Person
-
-struct Person: Codable, Identifiable {
-    var id: String = String()
-    var firstName: String = String()
-    var lastName: String = String()
-    var age: Int = Int()
-    var gender: String = String()
-    var country: String = String()
+struct Person: Equatable {
+    let id: String
+    let firstName: String
+    let lastName: String
+    let age: Int
+    let gender: String
+    let country: String
 }

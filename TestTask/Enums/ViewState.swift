@@ -7,8 +7,18 @@
 
 import Foundation
 
-enum ViewState {
+enum ViewState: Equatable {
+    
     case empty
-    case list
-    case error
+    case dataReceived
+    case error(errorState: Error)
+
+    static func == (lhs: ViewState, rhs: ViewState) -> Bool {
+        switch(lhs, rhs) {
+        case (.dataReceived, .dataReceived),
+            (.empty, .empty),
+            (.error, .error): return true
+        default: return false
+        }
+    }
 }
