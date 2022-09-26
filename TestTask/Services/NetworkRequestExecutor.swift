@@ -10,11 +10,6 @@ import Alamofire
 import Combine
 import SwiftJWT
 
-struct JWTClaims: Claims {
-    let uid: UUID
-    let identity: String
-}
-
 final class NetworkRequestExecutor {
     static let network: Session = Session.default
     let network: Session
@@ -32,7 +27,7 @@ final class NetworkRequestExecutor {
         self.baseURLString = baseURLString
     }
     
-    func getJWTToken() -> String {
+    private func getJWTToken() -> String {
         do {
             let claims = JWTClaims(uid: UUID(), identity: "Yevstafieva Yevheniia")
             var jwt = JWT(claims: claims)

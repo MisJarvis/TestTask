@@ -13,64 +13,69 @@ extension MainView: Inspectable {}
 
 class MainViewTests: XCTestCase {
     
-    func testMainViewDataCompleted() throws {
-        let viewModel = MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        viewModel.fetchPeople()
-        var sut = MainView()
+    func testMainViewEmptyState() throws {
+        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let sut = MainView(viewModel: viewModel)
         
-        let exp = sut.on(\.didAppear) { view in
-            
-            let backgroundColor = try? view.find(viewWithTag: "main_background")
-            let backgroundNavBar = try? view.find(viewWithTag: "main_background_navbar")
-            
-            XCTAssertNotNil(backgroundColor)
-            XCTAssertNotNil(backgroundNavBar)
-        }
-        ViewHosting.host(view: sut.environmentObject(viewModel))
-        wait(for: [exp], timeout: 1.0)
+        viewModel.people = [:]
+        viewModel.currentState = .empty
+        
+        let image = try? sut.inspect().find(viewWithTag: "main_image_empty_list")
+        let text = try? sut.inspect().find(text: "main_text_empty")
+        
+        XCTAssertNotNil(image)
+        XCTAssertNotNil(text)
     }
     
-    func testMainViewDataNotCompleted() throws {
-        let viewModel = MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        var sut = MainView()
+    func testMainViewListState() throws {
+        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let sut = MainView(viewModel: viewModel)
         
-        let exp = sut.on(\.didAppear) { view in
-            let textFaildLoad = try? view.find(text: "Failed to load people list").string()
-            XCTAssertNotNil(textFaildLoad)
-            XCTAssertEqual(textFaildLoad, "Failed to load people list")
-            
-            let btnTryAgain = try? view.find(text: "Try again").string()
-            XCTAssertNotNil(btnTryAgain)
-            XCTAssertEqual(btnTryAgain, "Try again")
-        }
-        ViewHosting.host(view: sut.environmentObject(viewModel))
-        wait(for: [exp], timeout: 1.0)
+        viewModel.fetchPeople()
+        viewModel.currentState = .list
+        
+        let backgroundColor = try? sut.inspect().find(viewWithTag: "main_background")
+        let backgroundNavBar = try? sut.inspect().find(viewWithTag: "main_background_navbar")
+        
+        XCTAssertNotNil(backgroundColor)
+        XCTAssertNotNil(backgroundNavBar)
+    }
+    
+    func testMainViewErrorState() throws {
+        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let sut = MainView(viewModel: viewModel)
+        
+        viewModel.fetchPeople()
+        viewModel.currentState = .error
+        
+        let textFaildLoad = try? sut.inspect().find(text: "main_text_error").string()
+        XCTAssertNotNil(textFaildLoad)
+        XCTAssertEqual(textFaildLoad, "main_text_error")
+        
+        let btnTryAgain = try? sut.inspect().find(text: "main_text_try_again").string()
+        XCTAssertNotNil(btnTryAgain)
+        XCTAssertEqual(btnTryAgain, "main_text_try_again")
     }
     
     func testNavLinkTap() throws {
-        let viewModel = MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        viewModel.fetchPeople()
-        var sut = MainView()
+        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let sut = MainView(viewModel: viewModel)
         
-        let exp = sut.on(\.didAppear) { view in
-            let navLink = try? view.find(button: "main_navlink")
-            try navLink?.tap()
-        }
-        ViewHosting.host(view: sut.environmentObject(viewModel))
-        wait(for: [exp], timeout: 1.0)
+        viewModel.fetchPeople()
+        viewModel.currentState = .list
+        
+        let navLink = try? sut.inspect().find(button: "main_navlink")
+        try navLink?.tap()
     }
     
     func testButtonTryAgainTap() throws {
-        let viewModel = MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor()))
-        var sut = MainView()
+        let viewModel = MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor()))
+        let sut = MainView(viewModel: viewModel)
         
-        let exp = sut.on(\.didAppear) { view in
-            viewModel.people = [:]
-            
-            let button = try? view.find(button: "Try again")
-            try button?.tap()
-        }
-        ViewHosting.host(view: sut.environmentObject(viewModel))
-        wait(for: [exp], timeout: 1.0)
+        viewModel.fetchPeople()
+        viewModel.currentState = .error
+        
+        let button = try? sut.inspect().find(button: "main_text_try_again")
+        try button?.tap()
     }
 }

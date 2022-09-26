@@ -12,7 +12,7 @@ struct TestTaskApp: App {
     
     var body: some Scene {
         WindowGroup {
-            MainView().environmentObject(MainViewModel(dataFetchable: APIService(executor: NetworkRequestExecutor())))
+            MainView(viewModel: MainViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor())))
         }
     }
 }

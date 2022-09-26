@@ -15,14 +15,14 @@ class APIService: DataFetchable {
         self.executor = executor
     }
     
-    func getPeopleList() -> AnyPublisher<People, Error> {
+    func getPeopleList() -> AnyPublisher<NetworkResponse<[String]>, Error> {
         return executor.executeRequest(
             path: "/list",
             method: .get
         )
     }
     
-    func getPeopleDetails(id: String) -> AnyPublisher<PeopleDetails, Error> {
+    func getPeopleDetails(id: String) -> AnyPublisher<NetworkResponse<Person>, Error> {
         return executor.executeRequest(
             path: "/get/\(id)",
             method: .get
