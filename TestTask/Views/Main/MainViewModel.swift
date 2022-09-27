@@ -1,5 +1,5 @@
 //
-//  MainViewModelImpl.swift
+//  MainViewModel.swift
 //  TestTask
 //
 //  Created by Yevstafieva Yevheniia on 23.09.2022.
@@ -15,7 +15,7 @@ class MainViewModel: ObservableObject {
     
     @Published var people: [String: String] = [:]
     @Published var person: Person?
-    @Published var currentState: ViewState = .empty
+    @Published var currentState: ViewState = .loading
     
     init(dataFetchable: DataFetchable) {
         self.dataFetchable = dataFetchable

@@ -30,6 +30,8 @@ struct MainView: View {
                         .tag("main_background_navbar")
                     
                     switch viewModel.currentState {
+                    case .loading:
+                        ProgressView()
                     case .empty:
                         emptyStateView
                     case .dataReceived:

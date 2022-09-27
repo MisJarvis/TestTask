@@ -17,7 +17,7 @@ final class NetworkRequestExecutor {
     
     init(
         network: Session? = nil,
-        baseURLString: String = "https://opn-interview-service.nn.r.appspot.com"
+        baseURLString: String = "https://opn-interview-service.nn.r.appspot.com/"
     ) {
         if let network = network {
             self.network = network

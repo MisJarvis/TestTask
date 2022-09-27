@@ -30,6 +30,8 @@ struct DetailsView: View {
                     .tag("details_background_navbar")
                 
                 switch viewModel.currentState {
+                case .loading:
+                    ProgressView()
                 case .empty:
                     emptyStateView
                 case .dataReceived:

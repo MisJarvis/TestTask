@@ -9,6 +9,7 @@ import Foundation
 
 enum ViewState: Equatable {
     
+    case loading
     case empty
     case dataReceived
     case error(errorState: Error)

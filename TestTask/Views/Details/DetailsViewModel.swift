@@ -1,5 +1,5 @@
 //
-//  DetailsViewModelImpl.swift
+//  DetailsViewModel.swift
 //  TestTask
 //
 //  Created by Yevstafieva Yevheniia on 26.09.2022.
@@ -11,7 +11,7 @@ import LoggerAPI
 
 class DetailsViewModel: ObservableObject {
     @Published var person: Person?
-    @Published var currentState: ViewState = .empty
+    @Published var currentState: ViewState = .loading
     
     func fetchPerson(personId: String) {}
 }
