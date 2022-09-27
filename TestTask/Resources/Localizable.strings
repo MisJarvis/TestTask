@@ -19,5 +19,3 @@
 "details_label_gender" = "Gender: ";
 "details_label_country" = "Country: ";
 "details_text_empty" = "No data about person";
-"details_text_error" = "Failed to load person data";
-"details_text_try_again" = "Try again";

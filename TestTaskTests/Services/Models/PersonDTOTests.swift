@@ -8,10 +8,10 @@
 import XCTest
 @testable import TestTask
 
-class PersonDTOTests: XCTestCase {
+class DetailsDTOTests: XCTestCase {
     
     func testToDomainModel() throws {
-        let personDTO = PersonDTO(
+        let detailsDTO = DetailsDTO(
             id: "1111",
             firstName: "First Name",
             lastName: "Last Name",
@@ -20,7 +20,7 @@ class PersonDTOTests: XCTestCase {
             country: "Ukraine"
         )
         
-        let person = Person(
+        let details = Details(
             id: "1111",
             firstName: "First Name",
             lastName: "Last Name",
@@ -29,6 +29,6 @@ class PersonDTOTests: XCTestCase {
             country: "Ukraine"
         )
         
-        XCTAssertEqual(personDTO.toDomainModel(), person)
+        XCTAssertEqual(detailsDTO.toDomainModel(), details)
     }
 }

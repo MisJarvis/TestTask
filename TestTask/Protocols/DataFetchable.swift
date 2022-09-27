@@ -10,5 +10,5 @@ import Combine
 
 protocol DataFetchable {
     func getPeopleList() -> AnyPublisher<[String], Error>
-    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error>
+    func getPeopleDetails(id: String) -> AnyPublisher<Details, Error>
 }

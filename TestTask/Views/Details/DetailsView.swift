@@ -10,7 +10,6 @@ import SwiftUI
 struct DetailsView: View {
     
     @ObservedObject var viewModel: DetailsViewModel
-    var personId: String
     
     var body: some View {
         ZStack {
@@ -32,12 +31,10 @@ struct DetailsView: View {
                 switch viewModel.currentState {
                 case .loading:
                     ProgressView()
-                case .empty:
-                    emptyStateView
                 case .dataReceived:
                     listStateView
-                case .error(let error):
-                    errorStateView(error: error)
+                case .empty, .error:
+                    emptyStateView
                 }
                 Spacer()
             }
@@ -45,9 +42,6 @@ struct DetailsView: View {
             .font(.title2)
             .foregroundColor(.black)
             .background(.clear)
-        }
-        .onAppear {
-            self.viewModel.fetchPerson(personId: personId)
         }
     }
 }
@@ -95,36 +89,32 @@ extension DetailsView {
             }
         }
     }
-    
-    private func errorStateView(error: Error) -> some View {
-        VStack(alignment: .center) {
-            Text("details_title_error")
-                .font(.title)
-            
-            Text(error.localizedDescription)
-                .font(.title3)
-                .padding()
-                .tag("details_text_error")
-            
-            Button {
-                viewModel.fetchPerson(personId: personId)
-            } label: {
-                Label("details_text_try_again", systemImage: "arrow.clockwise")
-            }
-        }
-    }
 }
 
 #if DEBUG
 struct DetailsView_Previews: PreviewProvider {
     static var previews: some View {
-        DetailsView(viewModel: DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor())), personId: String())
-            .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro"))
-            .previewDisplayName("iPhone 13 Pro")
+        DetailsView(viewModel: DetailsViewModel(person: Details(
+            id: "1111",
+            firstName: "First Name",
+            lastName: "Last Name",
+            age: 15,
+            gender: "Famele",
+            country: "Ukraine"
+        )))
+        .previewDevice(PreviewDevice(rawValue: "iPhone 13 Pro"))
+        .previewDisplayName("iPhone 13 Pro")
         
-        DetailsView(viewModel: DetailsViewModelImpl(dataFetchable: APIService(executor: NetworkRequestExecutor())), personId: String())
-            .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
-            .previewDisplayName("iPhone 8")
+        DetailsView(viewModel: DetailsViewModel(person: Details(
+            id: "1111",
+            firstName: "First Name",
+            lastName: "Last Name",
+            age: 15,
+            gender: "Famele",
+            country: "Ukraine"
+        )))
+        .previewDevice(PreviewDevice(rawValue: "iPhone 8"))
+        .previewDisplayName("iPhone 8")
     }
 }
 #endif

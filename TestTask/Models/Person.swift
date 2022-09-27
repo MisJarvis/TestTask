@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct Person: Equatable {
+struct Person: Hashable {
     let id: String
-    let firstName: String
-    let lastName: String
-    let age: Int
-    let gender: String
-    let country: String
+    let details: Details
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }

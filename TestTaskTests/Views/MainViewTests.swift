@@ -18,7 +18,7 @@ class MainViewTests: XCTestCase {
         let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.people = [:]
+        viewModel.people = []
         viewModel.currentState = .empty
         
         let image = try? sut.inspect().find(viewWithTag: "main_image_empty_list")
@@ -33,7 +33,17 @@ class MainViewTests: XCTestCase {
         let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.people = ["1111": "Name 1"]
+        viewModel.people = [Person(
+            id: "1111",
+            details: Details(
+                id: "1111",
+                firstName: "First Name",
+                lastName: "Last Name",
+                age: 15,
+                gender: "Famele",
+                country: "Ukraine"
+            )
+        )]
         viewModel.currentState = .dataReceived
         
         let backgroundColor = try? sut.inspect().find(viewWithTag: "main_background")
@@ -49,7 +59,7 @@ class MainViewTests: XCTestCase {
         let sut = MainView(viewModel: viewModel)
         
         viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
-
+        
         let titleError = try? sut.inspect().find(text: "main_title_error").string()
         XCTAssertNotNil(titleError)
         XCTAssertEqual(titleError, "main_title_error")
@@ -67,7 +77,17 @@ class MainViewTests: XCTestCase {
         let viewModel = MainViewModel(dataFetchable: mockDataFetchable)
         let sut = MainView(viewModel: viewModel)
         
-        viewModel.people = ["1111": "Name 1"]
+        viewModel.people = [Person(
+            id: "1111",
+            details: Details(
+                id: "1111",
+                firstName: "First Name",
+                lastName: "Last Name",
+                age: 15,
+                gender: "Famele",
+                country: "Ukraine"
+            )
+        )]
         viewModel.currentState = .dataReceived
         
         let navLink = try? sut.inspect().find(button: "main_navlink")

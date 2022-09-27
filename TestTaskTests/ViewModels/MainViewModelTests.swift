@@ -41,7 +41,7 @@ class MainViewModelTests: XCTestCase {
     func testFetchPeopleListSuccessAndFetchPeopleDetailsSuccess() {
         let mockDataFetchable = MockDataFetchable()
         mockDataFetchable.peopleList = ["1111", "2222", "3333"]
-        mockDataFetchable.person = Person(
+        mockDataFetchable.person = Details(
             id: "1111",
             firstName: "First Name",
             lastName: "Last Name",

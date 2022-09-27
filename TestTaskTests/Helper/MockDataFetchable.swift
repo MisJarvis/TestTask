@@ -13,7 +13,7 @@ import Combine
 class MockDataFetchable: DataFetchable {
     
     var peopleList: [String]?
-    var person: Person?
+    var person: Details?
     
     func getPeopleList() -> AnyPublisher<[String], Error> {
         return Future<[String], Error> { promise in
@@ -26,8 +26,8 @@ class MockDataFetchable: DataFetchable {
         .eraseToAnyPublisher()
     }
     
-    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error> {
-        return Future<Person, Error> { promise in
+    func getPeopleDetails(id: String) -> AnyPublisher<Details, Error> {
+        return Future<Details, Error> { promise in
             if let data = self.person {
                 promise(.success(data))
             } else {

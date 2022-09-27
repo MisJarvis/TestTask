@@ -70,12 +70,12 @@ extension MainView {
     private var listStateView: some View {
         ScrollView {
             VStack(alignment: .leading) {
-                ForEach(viewModel.people.sorted(by: >), id: \.key) { id, name in
+                ForEach(viewModel.people, id: \.self) { person in
                     NavigationLink {
-                        DetailsView(viewModel: DetailsViewModelImpl(dataFetchable: viewModel.dataFetchable), personId: id)
+                        DetailsView(viewModel: DetailsViewModel(person: person.details))
                     } label: {
                         HStack {
-                            Label(name, systemImage: "folder")
+                            Label(person.details.firstName, systemImage: "folder")
                                 .padding()
                                 .tag("main_label_person")
                             Spacer()

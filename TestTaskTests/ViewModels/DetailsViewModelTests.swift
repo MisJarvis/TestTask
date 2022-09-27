@@ -13,7 +13,8 @@ class DetailsViewModelTests: XCTestCase {
     
     func testFetchPeopleDetailsEmpty() throws {
         let mockDataFetchable = MockDataFetchable()
-        let sut = DetailsViewModelImpl(dataFetchable: mockDataFetchable)
+        mockDataFetchable.person = nil
+        let sut = DetailsViewModel(person: mockDataFetchable.person)
         
         XCTAssertNil(sut.person)
         guard case .empty = sut.currentState else {
@@ -24,7 +25,7 @@ class DetailsViewModelTests: XCTestCase {
     
     func testFetchPeopleDetailsSuccess() throws {
         let mockDataFetchable = MockDataFetchable()
-        mockDataFetchable.person = Person(
+        mockDataFetchable.person = Details(
             id: "1111",
             firstName: "First Name",
             lastName: "Last Name",
@@ -33,26 +34,12 @@ class DetailsViewModelTests: XCTestCase {
             country: "Ukraine"
         )
         
-        let sut = DetailsViewModelImpl(dataFetchable: mockDataFetchable)
-        sut.fetchPerson(personId: "1111")
+        let sut = DetailsViewModel(person: mockDataFetchable.person)
         
         XCTAssertNotNil(sut.person)
         guard case .dataReceived = sut.currentState else {
             XCTFail("Unexpected state")
             return
         }
-    }
-    
-    func testFetchPeopleDetailsError() throws {
-        let mockDataFetchable = MockDataFetchable()
-        let sut = DetailsViewModelImpl(dataFetchable: mockDataFetchable)
-        sut.fetchPerson(personId: "1111")
-        
-        XCTAssertNil(sut.person)
-        guard case .error(let error) = sut.currentState else {
-            XCTFail("Unexpected state")
-            return
-        }
-        XCTAssertEqual(error.localizedDescription, "Data person is empty")
     }
 }

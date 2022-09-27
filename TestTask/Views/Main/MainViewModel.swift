@@ -13,8 +13,8 @@ class MainViewModel: ObservableObject {
     
     var dataFetchable: DataFetchable
     
-    @Published var people: [String: String] = [:]
-    @Published var person: Person?
+    @Published var people: [Person] = []
+    @Published var person: Details?
     @Published var currentState: ViewState = .loading
     
     init(dataFetchable: DataFetchable) {
@@ -58,10 +58,7 @@ class MainViewModelImpl: MainViewModel {
                 Log.error("Get Person Data Error: \(error)")
             } receiveValue: { [weak self] person in
                 guard let self = self else { return }
-                let key = person.id
-                let value = person.firstName
-                self.people[key] = value
-                
+                self.people.append(Person(id: person.id, details: person))
                 self.person = person
             }
             .store(in: &cancellables)

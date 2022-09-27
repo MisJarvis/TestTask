@@ -28,8 +28,8 @@ class APIService: DataFetchable {
             .eraseToAnyPublisher()
     }
     
-    func getPeopleDetails(id: String) -> AnyPublisher<Person, Error> {
-        func request() -> AnyPublisher<NetworkResponse<PersonDTO>, Error> {
+    func getPeopleDetails(id: String) -> AnyPublisher<Details, Error> {
+        func request() -> AnyPublisher<NetworkResponse<DetailsDTO>, Error> {
             return executor.executeRequest(
                 path: "/get/\(id)",
                 method: .get

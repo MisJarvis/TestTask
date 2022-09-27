@@ -14,10 +14,9 @@ extension DetailsView: Inspectable {}
 class DetailsViewTests: XCTestCase {
     
     func testDetailsViewEmptyState() throws {
-        let viewModel = DetailsViewModel()
-        let sut = DetailsView(viewModel: viewModel, personId: "1111")
+        let viewModel = DetailsViewModel(person: nil)
+        let sut = DetailsView(viewModel: viewModel)
         
-        viewModel.person = nil
         viewModel.currentState = .empty
         
         let image = try? sut.inspect().find(viewWithTag: "details_image_empty_list")
@@ -28,17 +27,16 @@ class DetailsViewTests: XCTestCase {
     }
     
     func testDetailsViewListState() throws {
-        let viewModel = DetailsViewModel()
-        let sut = DetailsView(viewModel: viewModel, personId: "1111")
-        
-        viewModel.person = Person(
+        let viewModel = DetailsViewModel(person: Details(
             id: "1111",
             firstName: "First Name",
             lastName: "Last Name",
             age: 15,
             gender: "Famele",
             country: "Ukraine"
-        )
+        ))
+        let sut = DetailsView(viewModel: viewModel)
+        
         viewModel.currentState = .dataReceived
         
         let backgroundColor = try? sut.inspect().find(viewWithTag: "details_background")
@@ -56,33 +54,5 @@ class DetailsViewTests: XCTestCase {
         XCTAssertNotNil(agePerson)
         XCTAssertNotNil(genderPerson)
         XCTAssertNotNil(countryPerson)
-    }
-    
-    func testDetailsViewErrorState() throws {
-        let viewModel = DetailsViewModel()
-        let sut = DetailsView(viewModel: viewModel, personId: "1111")
-        
-        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
-        
-        let titleError = try? sut.inspect().find(text: "details_title_error").string()
-        XCTAssertNotNil(titleError)
-        XCTAssertEqual(titleError, "details_title_error")
-        
-        let textError = try? sut.inspect().find(viewWithTag: "details_text_error")
-        XCTAssertNotNil(textError)
-        
-        let btnTryAgain = try? sut.inspect().find(text: "details_text_try_again").string()
-        XCTAssertNotNil(btnTryAgain)
-        XCTAssertEqual(btnTryAgain, "details_text_try_again")
-    }
-    
-    func testButtonTryAgainTap() throws {
-        let viewModel = DetailsViewModel()
-        let sut = DetailsView(viewModel: viewModel, personId: "1111")
-        
-        viewModel.currentState = .error(errorState: RuntimeError("Failed to load data"))
-  
-        let button = try? sut.inspect().find(button: "details_text_try_again")
-        try button?.tap()
     }
 }

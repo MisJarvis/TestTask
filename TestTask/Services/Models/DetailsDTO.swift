@@ -1,5 +1,5 @@
 //
-//  PersonDTO.swift
+//  DetailsDTO.swift
 //  TestTask
 //
 //  Created by Yevstafieva Yevheniia on 23.09.2022.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PersonDTO: Codable {
+struct DetailsDTO: Codable {
     let id: String
     let firstName: String
     let lastName: String
@@ -16,9 +16,9 @@ struct PersonDTO: Codable {
     let country: String
 }
 
-extension PersonDTO: DomainModelConvertible {
-    func toDomainModel() -> Person {
-        return Person(
+extension DetailsDTO: DomainModelConvertible {
+    func toDomainModel() -> Details {
+        return Details(
             id: self.id,
             firstName: self.firstName,
             lastName: self.lastName,

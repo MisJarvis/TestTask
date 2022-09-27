@@ -18,7 +18,8 @@
 		632FA20728DE33F500850BD4 /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FA20628DE33F500850BD4 /* APIService.swift */; };
 		632FA20A28DE37DC00850BD4 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FA20928DE37DC00850BD4 /* String.swift */; };
 		632FA20F28DE3D8800850BD4 /* DetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FA20E28DE3D8800850BD4 /* DetailsView.swift */; };
-		632FA21228DE41F600850BD4 /* PersonDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FA21128DE41F600850BD4 /* PersonDTO.swift */; };
+		632FA21228DE41F600850BD4 /* DetailsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FA21128DE41F600850BD4 /* DetailsDTO.swift */; };
+		6330695B28E32A1A008BB505 /* Details.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330695A28E32A1A008BB505 /* Details.swift */; };
 		633ED81C28E1D87900BDDBE5 /* NetworkResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633ED81B28E1D87900BDDBE5 /* NetworkResponse.swift */; };
 		633ED81F28E1DDBF00BDDBE5 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 633ED81E28E1DDBF00BDDBE5 /* Localizable.strings */; };
 		633ED82528E1ECB600BDDBE5 /* CGFloat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633ED82428E1ECB600BDDBE5 /* CGFloat.swift */; };
@@ -59,7 +60,8 @@
 		632FA20628DE33F500850BD4 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		632FA20928DE37DC00850BD4 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		632FA20E28DE3D8800850BD4 /* DetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsView.swift; sourceTree = "<group>"; };
-		632FA21128DE41F600850BD4 /* PersonDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonDTO.swift; sourceTree = "<group>"; };
+		632FA21128DE41F600850BD4 /* DetailsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailsDTO.swift; sourceTree = "<group>"; };
+		6330695A28E32A1A008BB505 /* Details.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Details.swift; sourceTree = "<group>"; };
 		633ED81B28E1D87900BDDBE5 /* NetworkResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkResponse.swift; sourceTree = "<group>"; };
 		633ED81E28E1DDBF00BDDBE5 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		633ED82428E1ECB600BDDBE5 /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
@@ -155,7 +157,7 @@
 		632FA1F428DDFE9E00850BD4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				632FA21128DE41F600850BD4 /* PersonDTO.swift */,
+				632FA21128DE41F600850BD4 /* DetailsDTO.swift */,
 				633ED81B28E1D87900BDDBE5 /* NetworkResponse.swift */,
 				633ED83C28E20BAE00BDDBE5 /* JWTClaims.swift */,
 			);
@@ -266,6 +268,7 @@
 			isa = PBXGroup;
 			children = (
 				63D2DE5628E2225C008A9394 /* Person.swift */,
+				6330695A28E32A1A008BB505 /* Details.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -422,7 +425,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				633ED82528E1ECB600BDDBE5 /* CGFloat.swift in Sources */,
-				632FA21228DE41F600850BD4 /* PersonDTO.swift in Sources */,
+				632FA21228DE41F600850BD4 /* DetailsDTO.swift in Sources */,
 				632FA20728DE33F500850BD4 /* APIService.swift in Sources */,
 				6368E53028DF480C00A5D400 /* DataFetchable.swift in Sources */,
 				632FA20F28DE3D8800850BD4 /* DetailsView.swift in Sources */,
@@ -435,6 +438,7 @@
 				632FA1EF28DDFA4E00850BD4 /* MainViewModel.swift in Sources */,
 				633ED82828E1F0BB00BDDBE5 /* ViewState.swift in Sources */,
 				63D2DE5428E21F6C008A9394 /* DomainModelConvertible.swift in Sources */,
+				6330695B28E32A1A008BB505 /* Details.swift in Sources */,
 				633ED83D28E20BAE00BDDBE5 /* JWTClaims.swift in Sources */,
 				632FA20A28DE37DC00850BD4 /* String.swift in Sources */,
 				63D2DE5928E224F2008A9394 /* RuntimeError.swift in Sources */,
