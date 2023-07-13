@@ -1,4 +1,4 @@
-# TestTask
+# TestTask - Test task
 An application for displaying a list of people and detailed information about them from the [server](http://opn-interview-service.nn.r.appspot.com/). 
 
 To obtain a token for working with server data, the following key is used
